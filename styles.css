@@ -1,0 +1,12 @@
+.dir-rtl.path-admin-user-profile .table th, .dir-rtl.path-admin-user-profile .table td {
+    text-align: right;
+}
+.profilefield_conditional_notice {
+    width: 85%;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.profilefield_conditional_optionlabel {
+    background-color: lightgrey;
+}

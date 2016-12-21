@@ -1,0 +1,85 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template profilefield_conditional/condition_configuration_page
+    Set condition configuration for the conditional profile field.
+
+    Classes required for JS:
+    * none
+
+    Data attibutes required for JS:
+    * data-field
+
+    Context variables required for this template:
+    * options Array of menu options.
+    * fields Array of custom profilefields.
+
+    Example context (json):
+    {
+        "options": [
+            {"option": "Option 1"},
+            {"option": "Option 2"}
+        ],
+        "fields": [
+            {"id": 1, "shortname": "Custom Field 1"},
+            {"id": 1, "shortname": "Custom Field 2"},
+            {"id": 1, "shortname": "Custom Field 3"},
+            {"id": 2, "shortname": "Custom Field 4"}
+        ]
+    }
+}}
+<div class="alert alert-info alert-block fade in profilefield_conditional_notice">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{#str}}notice, profilefield_conditional{{/str}}
+</div>
+<div class="no-overflow">
+<table class="table table-condensed">
+    <thead>
+    <tr>
+        <th scope="col" class="header">{{#str}}menuoption, profilefield_conditional{{/str}}</th>
+        {{#fields}}
+        <th scope="col" class="header">{{name}} ({{shortname}})</th>
+        {{/fields}}
+    </tr>
+    </thead>
+    <tbody>
+        {{#options}}
+        <tr class="profilefield_conditional_config">
+            <td class="profilefield_conditional_optionlabel">{{option}}</td>
+            {{#fields}}
+            <td>
+                <span style="white-space: nowrap;">
+                    <input type="checkbox" name="required_{{option}}[{{id}}]" id="required_{{option}}_{{id}}" data-field="profilefield_conditional_field_required_{{option}}_{{shortname}}" class="profilefield_conditional_field_required"/>
+                    <label for="required_{{option}}_{{id}}">{{#str}}required, profilefield_conditional{{/str}}</label>
+                </span>
+                <br />
+                <span style="white-space: nowrap;">
+                    <input type="checkbox" name="hidden{{option}}[{{id}}]" id="hidden_{{option}}_{{id}}" data-field="profilefield_conditional_field_hidden_{{option}}_{{shortname}}" class="profilefield_conditional_field_hidden"/>
+                    <label for="hidden_{{option}}_{{id}}">{{#str}}hidden, profilefield_conditional{{/str}}</label>
+                </span>
+            </td>
+            {{/fields}}
+        </tr>
+        {{/options}}
+    </tbody>
+</table>
+</div>
+
+<div data-region="scale-buttons">
+    <input type="button" data-action="cancel" value="{{#str}}cancel{{/str}}"/>
+    <input type="button" data-action="close" value="{{#str}}apply, profilefield_conditional{{/str}}"/>
+</div>
