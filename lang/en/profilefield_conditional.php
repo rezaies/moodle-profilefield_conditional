@@ -24,16 +24,18 @@
 
 $string['apply'] = 'OK';
 $string['conditionalhelp'] = 'How to enter the options?';
-$string['conditionalhelp_help'] = 'Please specifiy the menue options by entering them one per line here. you can then specify which other fields you want to be hidden or required if each option is selected.';
+$string['conditionalhelp_help'] = 'Please specify the menu options by entering one option per line. You can then specify which fields should be hidden or required when each option is selected.';
 $string['configurecondition'] = 'Configure conditions';
 $string['emptycondition'] = 'You need to configure option conditions.';
-$string['extradata'] = 'The submitted data contain value for fields that should be left blank based on the selected option here.';
+$string['extradata'] = 'The submitted data contains values for fields that should be left blank based on the selected option here.';
 $string['hidden'] = 'Hidden';
-$string['hiddeninitially'] = 'Hidden initially';
-$string['hiddenrequired'] = 'There is at least one required field that you set to be hidden as well!';
+$string['hiddeninitially'] = 'Hide initially';
+$string['hiddeninitially_help'] = '* Yes - None of the fields that may hide in some conditions is displayed initially. Some new fields may appear after users make a choice.
+* No - All fields will be displayed to users initially. When they select a value for the conditional field, some of the existing fields hide';
+$string['hiddenrequired'] = 'There is at least one field that has been set to hidden whilst also being required!';
 $string['menuoption'] = 'Menu option';
 $string['notaprofilefield'] = 'Some fields that are referred to in condition configuration do not exist. Please verify conditions. Remember to press "OK" if the configuration looks fine to you.';
-$string['notice'] = 'Please pay more attention if you are having more than one conditional field, as they may interfere each other. Please check that you don\'t fall into a situation where a field is required and hidden at the same time.';
+$string['notice'] = 'Warning, multiple conditional fields may cause conflicts. Hidden required fields may prevent the form from submission. To prevent this please check that users don\'t fall into a situation where a field is required by a conditional field and hidden by another conditional field at the same time.';
 $string['optionconditionmismatch'] = 'You have made some modifications to the menu options after the last time you configured option conditions. Please verify that your conditions are up to date.';
 $string['pluginname'] = 'Conditional field';
 $string['required'] = 'Required';

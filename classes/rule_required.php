@@ -14,11 +14,35 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file contains rule_required class.
+ *
+ * @package   profilefield_conditional
+ * @copyright 2016 Shamim Rezaie {@link http://foodle.org}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace profilefield_conditional;
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Required elements validation
+ *
+ * This class overrides MoodleQuickForm validation to allow hidden fields be empty
+ *
+ * @package   profilefield_conditional
+ * @copyright 2016 Shamim Rezaie {@link http://foodle.org}
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class rule_required extends \MoodleQuickForm_Rule_Required {
-    public function getValidationScript($options = null) {
+    /**
+     * This function returns Javascript code used to build client-side validation.
+     * It checks if an element is not empty.
+     *
+     * @param int $format format of data which needs to be validated.
+     * @return array
+     */
+    public function getValidationScript($format = null) {
         global $DB;
 
         static $js = '';
@@ -60,7 +84,7 @@ class rule_required extends \MoodleQuickForm_Rule_Required {
     }';
         }
 
-        list($prefix, $rule) = parent::getValidationScript($options);
+        list($prefix, $rule) = parent::getValidationScript($format);
 
         return array($prefix . $js, "ruleenabled && $rule");
     }

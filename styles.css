@@ -1,4 +1,5 @@
-.dir-rtl.path-admin-user-profile .table th, .dir-rtl.path-admin-user-profile .table td {
+.dir-rtl.path-admin-user-profile .table th,
+.dir-rtl.path-admin-user-profile .table td {
     text-align: right;
 }
 .profilefield_conditional_notice {

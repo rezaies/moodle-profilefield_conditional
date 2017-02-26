@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This file contains the conditional profile field definition class.
+ *
  * If you use profilefield_conditional instead of dropdown menu, you will be abe to hide one/some of the profile fields.
  * In order to do so, you have to enter the options of the dropdown in a specific way.
  *
@@ -33,7 +35,6 @@ require_once(__DIR__.'/../menu/define.class.php');
  * @copyright  2014 Shamim Rezaie {@link http://foodle.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 class profile_define_conditional extends profile_define_menu {
 
     /**
@@ -59,6 +60,7 @@ class profile_define_conditional extends profile_define_menu {
 
         // Param 4 for conditional type determines if all hidden fields are going to be initially hidden or not.
         $form->addElement('selectyesno', 'param4', get_string('hiddeninitially', 'profilefield_conditional'));
+        $form->addHelpButton('param4', 'hiddeninitially', 'profilefield_conditional');
         $form->setDefault('param4', 1); // Defaults to 'yes'.
         $form->setType('param4', PARAM_INT);
     }

@@ -15,17 +15,17 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This is the external API for this tool.
+ * This is the external API for this profile field.
  *
  * @package    profilefield_conditional
  * @copyright  2016 Shamim Rezaie
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 namespace profilefield_conditional;
 defined('MOODLE_INTERNAL') || die();
 
 require_once("$CFG->libdir/externallib.php");
-require_once("$CFG->libdir/grade/grade_scale.php");
 
 /**
  * This is the external API for this profile field.
@@ -49,8 +49,8 @@ class external extends \external_api {
     /**
      * Get custom profile fields.
      *
-     * @param int $pagecontext The page context
-     * @return \stdClass
+     * @param int $fieldid The field ID
+     * @return array Field records
      */
     public static function get_other_fields($fieldid) {
         global $DB;
@@ -75,7 +75,7 @@ class external extends \external_api {
     public static function get_other_fields_returns() {
         return new \external_multiple_structure(
             new \external_single_structure(array(
-                'id' => new \external_value(PARAM_INT, 'Scale value ID'),
+                'id' => new \external_value(PARAM_INT, 'Field ID'),
                 'shortname' => new \external_value(PARAM_RAW, 'Field short name'),
                 'name' => new \external_value(PARAM_RAW, 'Field name')
             ))

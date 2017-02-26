@@ -14,9 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * This file contains the rule_required_remove class.
+ *
+ * @package    profilefield_conditional
+ * @copyright  2016 Shamim Rezaie {@link http://foodle.org}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 namespace profilefield_conditional;
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class rule_required_remove
+ *
+ * @copyright  2016 Shamim Rezaie {@link http://foodle.org}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class rule_required_remove extends \HTML_QuickForm_Rule  {
     /**
      * Checks if an element is not empty.

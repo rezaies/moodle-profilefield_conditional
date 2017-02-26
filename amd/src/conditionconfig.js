@@ -22,14 +22,15 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
-        'profilefield_conditional/dialogue', 'profilefield_conditional/fieldvalues'],
-    function($, notification, templates, ajax, Dialogue, ModFieldValues) {
+        'profilefield_conditional/dialogue', 'profilefield_conditional/otherfields'],
+    function($, notification, templates, ajax, Dialogue, ModOtherFields) {
 
         /**
          * Condition config object.
          * @param {String} selectSelector The select box selector.
          * @param {String} inputSelector The hidden input field selector.
          * @param {String} triggerSelector The trigger selector.
+         * @param {Number} fieldId Current field's ID.
          */
         var ConditionConfig = function(selectSelector, inputSelector, triggerSelector, fieldId) {
             this.selectSelector = selectSelector;
@@ -37,14 +38,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
             this.triggerSelector = triggerSelector;
             this.fieldId = fieldId;
 
-            // Get the current menu options.
-            var originaloptions = [];
-            $(this.selectSelector).val().replace(/\r\n/, '\n').split('\n').forEach(function (value) {
-                if (value) {
-                    originaloptions.push({option: value});
-                }
-            });
-            this.originaloptions = originaloptions;
             $(triggerSelector).click(this.showConfig.bind(this));
         };
 
@@ -72,20 +65,21 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
             var self = this;
 
             this.options = [];
-            $(this.selectSelector).val().replace(/\r\n/, '\n').split('\n').forEach(function (value) {
+            $(this.selectSelector).val().replace(/\r\n/, '\n').split('\n').forEach(function(value, index) {
                 if (value) {
-                    self.options.push({option: value});
+                    self.options.push({index: index, option: value});
                 }
             });
-            /*if (this.options.length == 0) {
+            /*
+            if (this.options.length == 0) {
                 // This should not happen.
                 return;
-            }*/
+            }
+            */
 
             this.getOtherFields(this.fieldId).done(function() {
 
                 var context = {
-                    scalename: self.fields,
                     options: self.options,
                     fields: self.otherFields
                 };
@@ -157,21 +151,21 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
             // Set up the form only if there is configuration settings to set.
             if (currentconfig !== '') {
                 currentconfig.forEach(function(option) {
-                    option.requiredfields.forEach(function (field) {
+                    option.requiredfields.forEach(function(field) {
                         body.find('[data-field="profilefield_conditional_field_required_' + option.option + '_' + field + '"]')
                                 .attr('checked', true);
                         body.find('[data-field="profilefield_conditional_field_required_' + option.option + '_' + field + '"]')
                                 .each(
-                            function () {
+                            function() {
                                 self.applyRestriction(this);
                             }
                         );
                     });
-                    option.hiddenfields.forEach(function (field) {
+                    option.hiddenfields.forEach(function(field) {
                         body.find('[data-field="profilefield_conditional_field_hidden_' + option.option + '_' + field + '"]')
                                 .attr('checked', true);
                         body.find('[data-field="profilefield_conditional_field_hidden_' + option.option + '_' + field + '"]').each(
-                            function () {
+                            function() {
                                 self.applyRestriction(this);
                             }
                         );
@@ -184,7 +178,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
             }.bind(this));
             body.on('click', '[data-action="cancel"]', function() {
                 popup.close();
-            }.bind(this));
+            });
             body.on('click', '[type="checkbox"]', function(e) {
                 this.applyRestriction(e.target);
             }.bind(this));
@@ -214,10 +208,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                             ).is(':checked')) {
                         hiddenfields.push(field.shortname);
                     }
-
-                    if (!requiredfields.length && !hiddenfields.length) {
-                        return;
-                    }
                 });
                 data.push({
                     option: option.option,
@@ -231,14 +221,14 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
         };
 
         /**
-         * Get existing fields except the current field.
+         * Get all existing custom profile fields except the current field.
          *
          * @method getOtherFields
-         * @param {String} options The options string.
+         * @param {Number} fieldId The id of current field.
          * @return {Promise} A deffered object with field information.
          */
         ConditionConfig.prototype.getOtherFields = function(fieldId) {
-            return ModFieldValues.get_values(fieldId).then(function(values) {
+            return ModOtherFields.get_fields(fieldId).then(function(values) {
                 this.otherFields = values;
                 return values;
             }.bind(this));

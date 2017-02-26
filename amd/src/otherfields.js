@@ -14,7 +14,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Module to get the scale values.
+ * Module to get other profile fields.
  *
  * @package    profilefield_conditional
  * @copyright  2016 Shamim Rezaie (http://foodle.org)
@@ -23,17 +23,17 @@
 define(['jquery', 'core/ajax'], function($, ajax) {
     var localCache = [];
 
-    return /** @alias module:profilefield_conditional/fieldvalues */ {
+    return /** @alias module:profilefield_conditional/otherfields */ {
 
         /**
          * Return a promise object that will be resolved into a string eventually (maybe immediately).
          *
-         * @method get_values
+         * @method get_fields
          * @param {Number} fieldid The field id
          * @return [] {Promise}
          */
 
-        get_values: function(fieldid) {
+        get_fields: function(fieldid) {
 
             var deferred = $.Deferred();
 

@@ -17,7 +17,7 @@
 /**
  * Conditional profile field version information.
  *
- * @package    profilefield_dropdown
+ * @package    profilefield_conditional
  * @copyright  2014 Shamim Rezaie {@link http://foodle.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -25,6 +25,6 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2016122100;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2010112400;        // Requires this Moodle version.
+$plugin->requires  = 2015041700;        // Requires this Moodle version.
 $plugin->dependencies = array('profilefield_menu' => ANY_VERSION);
 $plugin->component = 'profilefield_conditional'; // Full name of the plugin (used for diagnostics).

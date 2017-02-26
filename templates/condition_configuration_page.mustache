@@ -31,14 +31,14 @@
     Example context (json):
     {
         "options": [
-            {"option": "Option 1"},
-            {"option": "Option 2"}
+            {"index": 0, "option": "Option 1"},
+            {"index": 1, "option": "Option 2"}
         ],
         "fields": [
-            {"id": 1, "shortname": "Custom Field 1"},
-            {"id": 1, "shortname": "Custom Field 2"},
-            {"id": 1, "shortname": "Custom Field 3"},
-            {"id": 2, "shortname": "Custom Field 4"}
+            {"id": 1, "shortname": "CF1", "name": "Custom Field 1"},
+            {"id": 2, "shortname": "CF2", "name": "Custom Field 2"},
+            {"id": 3, "shortname": "CF3", "name": "Custom Field 3"},
+            {"id": 4, "shortname": "CF4", "name": "Custom Field 4"}
         ]
     }
 }}
@@ -63,13 +63,13 @@
             {{#fields}}
             <td>
                 <span style="white-space: nowrap;">
-                    <input type="checkbox" name="required_{{option}}[{{id}}]" id="required_{{option}}_{{id}}" data-field="profilefield_conditional_field_required_{{option}}_{{shortname}}" class="profilefield_conditional_field_required"/>
-                    <label for="required_{{option}}_{{id}}">{{#str}}required, profilefield_conditional{{/str}}</label>
+                    <input type="checkbox" name="required_{{option}}[{{id}}]" id="required_{{index}}_{{id}}" data-field="profilefield_conditional_field_required_{{option}}_{{shortname}}" class="profilefield_conditional_field_required"/>
+                    <label for="required_{{index}}_{{id}}">{{#str}}required, profilefield_conditional{{/str}}</label>
                 </span>
                 <br />
                 <span style="white-space: nowrap;">
-                    <input type="checkbox" name="hidden{{option}}[{{id}}]" id="hidden_{{option}}_{{id}}" data-field="profilefield_conditional_field_hidden_{{option}}_{{shortname}}" class="profilefield_conditional_field_hidden"/>
-                    <label for="hidden_{{option}}_{{id}}">{{#str}}hidden, profilefield_conditional{{/str}}</label>
+                    <input type="checkbox" name="hidden{{option}}[{{id}}]" id="hidden_{{index}}_{{id}}" data-field="profilefield_conditional_field_hidden_{{option}}_{{shortname}}" class="profilefield_conditional_field_hidden"/>
+                    <label for="hidden_{{index}}_{{id}}">{{#str}}hidden, profilefield_conditional{{/str}}</label>
                 </span>
             </td>
             {{/fields}}
