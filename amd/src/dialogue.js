@@ -37,7 +37,7 @@ define(['core/yui'], function(Y) {
         this.yuiDialogue = null;
         var parent = this;
 
-        Y.use('moodle-core-notification', 'timers', function () {
+        Y.use('moodle-core-notification', 'timers', function() {
             parent.yuiDialogue = new M.core.dialogue({
                 headerContent: title,
                 bodyContent: content,
@@ -82,6 +82,7 @@ define(['core/yui'], function(Y) {
 
     /**
      * Get content.
+     * @return {node}
      */
     dialogue.prototype.getContent = function() {
         return this.yuiDialogue.bodyNode.getDOMNode();

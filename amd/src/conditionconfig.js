@@ -228,7 +228,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
          * @return {Promise} A deffered object with field information.
          */
         ConditionConfig.prototype.getOtherFields = function(fieldId) {
-            return ModOtherFields.get_fields(fieldId).then(function(values) {
+            return ModOtherFields.getFields(fieldId).then(function(values) {
                 this.otherFields = values;
                 return values;
             }.bind(this));

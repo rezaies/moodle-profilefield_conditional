@@ -28,19 +28,19 @@ define(['jquery', 'core/ajax'], function($, ajax) {
         /**
          * Return a promise object that will be resolved into a string eventually (maybe immediately).
          *
-         * @method get_fields
+         * @method getFields
          * @param {Number} fieldid The field id
          * @return [] {Promise}
          */
 
-        get_fields: function(fieldid) {
+        getFields: function(fieldid) {
 
             var deferred = $.Deferred();
 
             if (typeof localCache[fieldid] === 'undefined') {
                 ajax.call([{
                     methodname: 'profilefield_conditional_get_other_fields',
-                    args: {fieldid : fieldid},
+                    args: {fieldid: fieldid},
                     done: function(fieldinfo) {
                         localCache[fieldid] = fieldinfo;
                         deferred.resolve(fieldinfo);
