@@ -64,7 +64,7 @@ class rule_required extends \MoodleQuickForm_Rule_Required {
                 foreach ($dependencies as $field => $values) {
                     $js .= "{$field}:[";
                     foreach ($values as $value) {
-                        $js .= "'$value',";
+                        $js .= "'" . addslashes($value) . "',";
                     }
                     $js .= '],';
                 }

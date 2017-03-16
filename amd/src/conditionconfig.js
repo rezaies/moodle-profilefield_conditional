@@ -128,11 +128,17 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                 return;
             }
 
+            var slashedtargetatt = targetatt
+                    .replace(/\\/g, '\\\\')
+                    .replace(/'/g, '\\\'')
+                    .replace(/"/g, '\\"')
+                    .replace(/\0/g, '\\0');
+
             if ($(source).is(':checked')) {
-                $(source).parent().parent().find('[data-field="' + targetatt + '"]').attr('checked', false);
-                $(source).parent().parent().find('[data-field="' + targetatt + '"]').prop('disabled', true);
+                $(source).parent().parent().find('[data-field="' + slashedtargetatt + '"]').attr('checked', false);
+                $(source).parent().parent().find('[data-field="' + slashedtargetatt + '"]').prop('disabled', true);
             } else {
-                $(source).parent().parent().find('[data-field="' + targetatt + '"]').prop('disabled', false);
+                $(source).parent().parent().find('[data-field="' + slashedtargetatt + '"]').prop('disabled', false);
             }
         };
 
@@ -151,10 +157,15 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
             // Set up the form only if there is configuration settings to set.
             if (currentconfig !== '') {
                 currentconfig.forEach(function(option) {
+                    var slashedoption = option.option
+                            .replace(/\\/g, '\\\\')
+                            .replace(/'/g, '\\\'')
+                            .replace(/"/g, '\\"')
+                            .replace(/\0/g, '\\0');
                     option.requiredfields.forEach(function(field) {
-                        body.find('[data-field="profilefield_conditional_field_required_' + option.option + '_' + field + '"]')
+                        body.find('[data-field="profilefield_conditional_field_required_' + slashedoption + '_' + field + '"]')
                                 .attr('checked', true);
-                        body.find('[data-field="profilefield_conditional_field_required_' + option.option + '_' + field + '"]')
+                        body.find('[data-field="profilefield_conditional_field_required_' + slashedoption + '_' + field + '"]')
                                 .each(
                             function() {
                                 self.applyRestriction(this);
@@ -162,9 +173,9 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                         );
                     });
                     option.hiddenfields.forEach(function(field) {
-                        body.find('[data-field="profilefield_conditional_field_hidden_' + option.option + '_' + field + '"]')
+                        body.find('[data-field="profilefield_conditional_field_hidden_' + slashedoption + '_' + field + '"]')
                                 .attr('checked', true);
-                        body.find('[data-field="profilefield_conditional_field_hidden_' + option.option + '_' + field + '"]').each(
+                        body.find('[data-field="profilefield_conditional_field_hidden_' + slashedoption + '_' + field + '"]').each(
                             function() {
                                 self.applyRestriction(this);
                             }
@@ -197,14 +208,19 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
             this.options.forEach(function(option) {
                 var requiredfields = [];
                 var hiddenfields = [];
+                var slashedoption = option.option
+                        .replace(/\\/g, '\\\\')
+                        .replace(/'/g, '\\\'')
+                        .replace(/"/g, '\\"')
+                        .replace(/\0/g, '\\0');
                 self.otherFields.forEach(function(field) {
                     if (body.find(
-                            '[data-field="profilefield_conditional_field_required_' + option.option + '_' + field.shortname + '"]'
+                            '[data-field="profilefield_conditional_field_required_' + slashedoption + '_' + field.shortname + '"]'
                             ).is(':checked')) {
                         requiredfields.push(field.shortname);
                     }
                     if (body.find(
-                            '[data-field="profilefield_conditional_field_hidden_' + option.option + '_' + field.shortname + '"]'
+                            '[data-field="profilefield_conditional_field_hidden_' + slashedoption + '_' + field.shortname + '"]'
                             ).is(':checked')) {
                         hiddenfields.push(field.shortname);
                     }
