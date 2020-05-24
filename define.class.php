@@ -123,7 +123,7 @@ class profile_define_conditional extends profile_define_menu {
                 foreach ($conditions as $condition) {
                     $conditionoptions[] = $condition->option;
                 }
-                if (!empty(array_diff($options, $conditionoptions))) {
+                if (array_diff($options, $conditionoptions)) {
                     $err['conditionconfigbutton'] = get_string('optionconditionmismatch', 'profilefield_conditional');
                 }
 
