@@ -110,7 +110,7 @@ define(['jquery'], function($) {
         var initHiddenFields = [];
 
         this.allElements.forEach(function(element) {
-            if ((getFieldRow(element).find('.fitemtitle .req').length !== 0) ||
+            if ((getFieldRow(element).find('.fitemtitle .fa-exclamation-circle').length !== 0) ||
                     (getFieldRow(element).find('abbr.text-danger').length !== 0)) {     // Support for Boost.
                 initReqFields.push(element);
             }
@@ -145,7 +145,7 @@ define(['jquery'], function($) {
                 allElements.forEach(function(element) {
                     fieldRow = getFieldRow(element);
                     if (boostStyle === null) {
-                        boostStyle = fieldRow.has('.pull-xs-right').length;
+                        boostStyle = fieldRow.has('.float-sm-right').length;
                     }
                     if ($.inArray(element, requiredfields) != -1) {
                         if (boostStyle) {
@@ -153,17 +153,17 @@ define(['jquery'], function($) {
                             if (node.length !== 0) {
                                 reqHTML = node.html();
                             } else {    // Fallback.
-                                node = fieldRow.find('.req');
+                                node = fieldRow.find('.fa-exclamation-circle');
                             }
                         } else {
-                            node = fieldRow.find('.req');
+                            node = fieldRow.find('.fa-exclamation-circle');
                         }
 
                         // The following check is required to prevent putting multiple asterisks.
                         if (node.length === 0) {
                             node = $(reqHTML).hide();
                             if (boostStyle) {
-                                fieldRow.find('.pull-xs-right').append(node);
+                                fieldRow.find('.float-sm-right').append(node);
                             } else {
                                 fieldRow.find('.fitemtitle label').append(node);
                             }
@@ -182,7 +182,7 @@ define(['jquery'], function($) {
                             // The following check is required to prevent removing asterisk when the selected item
                             // is quickly changed.
                             if ($.inArray(element, requiredfields) != -1) {
-                                getFieldRow(element).find('.req').remove();
+                                getFieldRow(element).find('.fa-exclamation-circle').remove();
                             }
                         });
                     }
