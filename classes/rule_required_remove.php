@@ -46,9 +46,9 @@ class rule_required_remove extends \HTML_QuickForm_Rule  {
 
         // Removing "required" conditions of fields that can be hidden.
         // This covers form fields that are placed after the conditional field.
-        foreach ($options->options as $key => $option) {
-            if (!empty($options->disabledset[$key])) {
-                foreach ($options->disabledset[$key] as $element) {
+        foreach (array_keys($options->options) as $option) {
+            if (!empty($options->disabledset[$option])) {
+                foreach ($options->disabledset[$option] as $element) {
                     if (false !== $pos = array_search("profile_field_{$element}", $mform->_required)) {
                         array_splice($mform->_required, $pos, 1);
                     }
@@ -65,6 +65,7 @@ class rule_required_remove extends \HTML_QuickForm_Rule  {
 
         $submittedvalues = $mform->getSubmitValues();
 
+        // Make sure that the submitted data does not contain value for any of the fields we expect to be hidden.
         // We couldn't merge this into the previous one as the previous loop needs to finish to its end.
         if (!empty($options->disabledset[$value])) {
             foreach ($options->disabledset[$value] as $element) {

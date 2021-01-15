@@ -84,9 +84,18 @@ class profile_field_conditional extends profile_field_menu {
         $mform->addElement('select', $this->inputname, format_string($this->field->name), $this->options);
 
         // MDL-57085: The following chunk would be moved into edit_after_data if edit_after_data were being called for signup form.
-        foreach ($this->options as $key => $option) {
-            if (!empty($this->disabledset[$key])) {
-                foreach ($this->disabledset[$key] as $element) {
+        if ($this->field->param4) { // The 'hide all' option is selected.
+            foreach (call_user_func_array('array_merge', $this->disabledset) as $element) {
+                $mform->hideIf("profile_field_{$element}", $this->inputname, 'eq', '');
+            }
+        }
+        foreach (array_keys($this->options) as $option) {
+            if (!empty($this->disabledset[$option])) {
+                foreach ($this->disabledset[$option] as $element) {
+                    $mform->hideIf("profile_field_{$element}", $this->inputname, 'eq', $option);
+
+                    // Remove from the "required" list in case it is defined as required.
+                    // This takes care of the elements that are previously defined.
                     if (false !== $pos = array_search("profile_field_{$element}", $mform->_required)) {
                         array_splice($mform->_required, $pos, 1);
                     }
@@ -103,9 +112,10 @@ class profile_field_conditional extends profile_field_menu {
 
         // MDL-57085: The following line would be moved into edit_after_data if edit_after_data were being called for signup form.
         $PAGE->requires->js_call_amd('profilefield_conditional/conditions', 'apply',
-                array($this->field->shortname, $this->field->param5, $this->field->param4, $mform->getReqHTML()));
+                array($this->field->shortname, $this->field->param5, $mform->getReqHTML()));
 
         // MDL-57085: The following lines were not required if edit_after_data were being called for signup form.
+        // This is for the future fields that are defined as required in their settings.
         MoodleQuickForm::registerRule('required', null, 'profilefield_conditional\rule_required');
         MoodleQuickForm::registerRule('profilefield_conditional_rule', null, 'profilefield_conditional\rule_required_remove');
         $mform->addRule($this->inputname, get_string('extradata', 'profilefield_conditional'), 'profilefield_conditional_rule',
