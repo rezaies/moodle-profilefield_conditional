@@ -17,7 +17,6 @@
  * Handle opening a dialogue to configure condition data.
  *
  * @module     profilefield_conditional/conditionconfig
- * @package    profilefield_conditional
  * @copyright  2016 Shamim Rezaie <http://foodle.org>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

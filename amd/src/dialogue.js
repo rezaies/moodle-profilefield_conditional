@@ -18,7 +18,6 @@
  * use the YUI version in AMD code until it is replaced.
  *
  * @module     profilefield_conditional/dialogue
- * @package    profilefield_conditional
  * @copyright  2016 Shamim Rezaie {@link http://foodle.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

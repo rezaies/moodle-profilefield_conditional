@@ -16,7 +16,7 @@
 /**
  * Module to get other profile fields.
  *
- * @package    profilefield_conditional
+ * @module     profilefield_conditional/otherfields
  * @copyright  2016 Shamim Rezaie (http://foodle.org)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */

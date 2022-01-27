@@ -55,8 +55,12 @@ class profile_define_conditional extends profile_define_menu {
         // Param 5 for conditional type contains all the conditions in JSON format.
         $form->addElement('hidden', 'param5', '', array('id' => 'profilefield_conditional_conditionconfiguration'));
         $form->setType('param5', PARAM_RAW);
-        $PAGE->requires->js_call_amd('profilefield_conditional/conditionconfig', 'init', array('#id_param1',
-            '#profilefield_conditional_conditionconfiguration', '#id_conditionconfigbutton', $fieldid));
+
+        $script = html_writer::script("require(['profilefield_conditional/conditionconfig'], function(conditionConfig) {
+            conditionConfig.init('[name=\"param1\"]', '#profilefield_conditional_conditionconfiguration',
+                '[name=\"conditionconfigbutton\"]', $fieldid);
+        });");
+        $form->addElement('html', $script);
 
         // Param 4 for conditional type determines if all hidden fields are going to be initially hidden or not.
         $form->addElement('selectyesno', 'param4', get_string('hiddeninitially', 'profilefield_conditional'));

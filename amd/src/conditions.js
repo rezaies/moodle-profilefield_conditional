@@ -17,7 +17,6 @@
  * Handles applying conditions.
  *
  * @module     profilefield_conditional/conditions
- * @package    profilefield_conditional
  * @copyright  2016 Shamim Rezaie <http://foodle.org>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
