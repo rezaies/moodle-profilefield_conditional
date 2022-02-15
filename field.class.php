@@ -137,7 +137,7 @@ class profile_field_conditional extends profile_field_menu {
             foreach ($this->requiredset[$usernew->{$this->inputname}] as $requiredfield) {
 
                 $data = new stdClass();
-                $data->field1 = $this->field->name;
+                $data->field1 = format_string($this->field->name);
                 $data->value1 = $this->options[$usernew->{$this->inputname}];
                 $data->field2 = $requiredfield;
 
