@@ -23,7 +23,6 @@
  */
 
 namespace profilefield_conditional;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Required elements validation
@@ -42,7 +41,7 @@ class rule_required extends \MoodleQuickForm_Rule_Required {
      * @param int $format format of data which needs to be validated.
      * @return array
      */
-    public function getValidationScript($format = null) {
+    public function getValidationScript($format = null) { // phpcs:ignore moodle.NamingConventions.ValidFunctionName.LowercaseMethod
         global $DB;
 
         static $js = '';
