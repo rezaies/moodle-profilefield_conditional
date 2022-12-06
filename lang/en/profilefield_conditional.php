@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['apply'] = 'OK';
+$string['apply'] = 'Apply';
 $string['conditionalhelp'] = 'How to enter the options?';
 $string['conditionalhelp_help'] = 'Please specify the menu options by entering one option per line. You can then specify which fields should be hidden or required when each option is selected.';
 $string['configurecondition'] = 'Configure conditions';
