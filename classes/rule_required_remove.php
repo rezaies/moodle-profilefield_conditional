@@ -30,7 +30,7 @@ namespace profilefield_conditional;
  * @copyright  2016 Shamim Rezaie {@link http://foodle.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class rule_required_remove extends \HTML_QuickForm_Rule  {
+class rule_required_remove extends \HTML_QuickForm_Rule {
     /**
      * Checks if an element is not empty.
      * This is a server-side validation, it works for both text fields and editor fields
