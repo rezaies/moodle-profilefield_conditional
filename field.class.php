@@ -133,7 +133,7 @@ class profile_field_conditional extends profile_field_menu {
 
         $errors = array();
 
-        if (!empty($usernew->{$this->inputname}) and !empty($this->requiredset[$usernew->{$this->inputname}])) {
+        if (!empty($usernew->{$this->inputname}) && !empty($this->requiredset[$usernew->{$this->inputname}])) {
             foreach ($this->requiredset[$usernew->{$this->inputname}] as $requiredfield) {
 
                 $data = new stdClass();
