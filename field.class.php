@@ -132,7 +132,7 @@ class profile_field_conditional extends profile_field_menu {
         // impossible for the validation to be performed. The Moodle function must be updated to make validation during
         // user upload possible.
         $callingfunction = debug_backtrace(
-            !DEBUG_BACKTRACE_PROVIDE_OBJECT|DEBUG_BACKTRACE_IGNORE_ARGS,
+            !DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS,
             2
         )[1]['function'];
         $isuploadingusers = $callingfunction == 'uu_check_custom_profile_data';
