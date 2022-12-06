@@ -123,8 +123,11 @@ class profile_field_conditional extends profile_field_menu {
     }
 
     /**
-     * @inheritDoc
-     **/
+     * Validate the form field from profile page
+     *
+     * @param stdClass $usernew
+     * @return array
+     */
     public function edit_validate_field($usernew) {
         global $DB;
 
