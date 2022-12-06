@@ -69,12 +69,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                     self.options.push({index: index, option: value});
                 }
             });
-            /*
-            if (this.options.length == 0) {
-                // This should not happen.
-                return;
-            }
-            */
 
             this.getOtherFields(this.fieldId).done(function() {
 
