@@ -41,6 +41,7 @@ class rule_required extends \MoodleQuickForm_Rule_Required {
      *
      * @param int $format format of data which needs to be validated.
      * @return array
+     * phpcs:ignore moodle.NamingConventions.ValidFunctionName.LowercaseMethod
      */
     public function getValidationScript($format = null) {
         global $DB;
