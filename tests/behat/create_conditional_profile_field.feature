@@ -1,5 +1,5 @@
 @profilefield @profilefield_conditional
-Feature: Create profilefield
+Feature: Create conditional profile field
   In order to make some fields conditionally required or hidden based on a value of a certain field
   As an admin
   I should be able to create a field based on the Conditional Field type

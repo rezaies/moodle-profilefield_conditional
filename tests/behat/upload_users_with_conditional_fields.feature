@@ -1,5 +1,5 @@
 @profilefield @profilefield_conditional @_file_upload @javascript
-Feature: Upload users
+Feature: Upload users with conditional fields
   In order to add users with conditional custom profile fields to the system
   As an admin
   I need to upload files containing the users data
