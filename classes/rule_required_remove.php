@@ -23,7 +23,6 @@
  */
 
 namespace profilefield_conditional;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class rule_required_remove
