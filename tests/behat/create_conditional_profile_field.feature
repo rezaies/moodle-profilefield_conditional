@@ -9,7 +9,8 @@ Feature: Create conditional profile field
 
     # Create a dependent text input field
     Given I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Text input"
+    And I click on "Create a new profile field" "link"
+    And I click on "Text input" "link"
     And I set the following fields to these values:
       | Short name | dependenttextinput   |
       | Name       | Dependent text input |
@@ -17,7 +18,8 @@ Feature: Create conditional profile field
 
     # Create a dependent text area field
     Given I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Text area"
+    And I click on "Create a new profile field" "link"
+    And I click on "Text area" "link"
     And I set the following fields to these values:
       | Short name | dependenttextarea   |
       | Name       | Dependent text area |
@@ -25,7 +27,8 @@ Feature: Create conditional profile field
 
     # Create an independent checkbox field
     Given I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Checkbox"
+    And I click on "Create a new profile field" "link"
+    And I click on "Checkbox" "link"
     And I set the following fields to these values:
       | Short name | independentcheckbox  |
       | Name       | Independent checkbox |
@@ -35,7 +38,8 @@ Feature: Create conditional profile field
   Scenario: Successfully toggle visibility of dependent fields
     Given I log in as "admin"
     And I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Conditional field"
+    And I click on "Create a new profile field" "link"
+    And I click on "Conditional field" "link"
     And I set the following fields to these values:
       | Short name | superfield  |
       | Name       | Super field |
@@ -81,7 +85,8 @@ Feature: Create conditional profile field
   Scenario: Validate submission of required field
     Given I log in as "admin"
     And I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Conditional field"
+    And I click on "Create a new profile field" "link"
+    And I click on "Conditional field" "link"
     And I set the following fields to these values:
       | Short name | superfield  |
       | Name       | Super field |

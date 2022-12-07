@@ -8,7 +8,8 @@ Feature: Upload users with conditional fields
     # Create conditional profile field
     Given I log in as "admin"
     And I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Conditional field"
+    And I click on "Create a new profile field" "link"
+    And I click on "Conditional field" "link"
     And I set the following fields to these values:
       | Short name | superfield  |
       | Name       | Super field |
@@ -23,7 +24,8 @@ Feature: Upload users with conditional fields
 
     # Create a dependent text input field
     Given I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Text input"
+    And I click on "Create a new profile field" "link"
+    And I click on "Text input" "link"
     And I set the following fields to these values:
       | Short name | dependenttextinput   |
       | Name       | Dependent text input |
@@ -31,7 +33,8 @@ Feature: Upload users with conditional fields
 
     # Create a dependent text area field
     Given I navigate to "Users > Accounts > User profile fields" in site administration
-    And I set the field "datatype" to "Text area"
+    And I click on "Create a new profile field" "link"
+    And I click on "Text area" "link"
     And I set the following fields to these values:
       | Short name | dependenttextarea   |
       | Name       | Dependent text area |
@@ -49,10 +52,13 @@ Feature: Upload users with conditional fields
     # Verify that conditional field has been set
     And I navigate to "Users > Accounts > Browse list of users" in site administration
     And I follow "Tom Jones"
+
     Then I should see "Super field"
     And I should see "The big guy"
+
     When I navigate to "Users > Accounts > Browse list of users" in site administration
     And I follow "Trent Reznor"
+
     Then I should see "Super field"
     And I should see "Loves cats"
 
@@ -79,13 +85,16 @@ Feature: Upload users with conditional fields
     # Verify that conditional field has been set
     And I navigate to "Users > Accounts > Browse list of users" in site administration
     And I follow "Tom Jones"
+
     Then I should see "Super field"
     And I should see "The big guy"
     And I should see "Dependent text input"
     And I should see "Apples"
     And I should not see "Dependent text area"
+
     When I navigate to "Users > Accounts > Browse list of users" in site administration
     And I follow "Trent Reznor"
+
     Then I should see "Super field"
     And I should see "Loves cats"
     And I should see "Dependent text area"
