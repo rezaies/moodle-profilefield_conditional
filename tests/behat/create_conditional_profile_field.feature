@@ -76,3 +76,32 @@ Feature: Create conditional profile field
     And I should see "Apples and Oranges"
     And I should not see "Dependent text input"
     And I should not see "Update profile"
+
+  @javascript
+  Scenario: Validate submission of required field
+    Given I log in as "admin"
+    And I navigate to "Users > Accounts > User profile fields" in site administration
+    And I set the field "datatype" to "Conditional field"
+    And I set the following fields to these values:
+      | Short name | superfield  |
+      | Name       | Super field |
+    And I set the field "Menu options (one per line)" to multiline:
+      """
+      The big guy
+      Loves cats
+      """
+    And I click on "Configure conditions" "button"
+    And I click on "[data-field='profilefield_conditional_field_required_The big guy_dependenttextinput']" "css_element"
+    And I click on "[data-field='profilefield_conditional_field_hidden_The big guy_dependenttextarea']" "css_element"
+    And I click on "[data-field='profilefield_conditional_field_hidden_Loves cats_dependenttextinput']" "css_element"
+    And I click on "[data-field='profilefield_conditional_field_required_Loves cats_dependenttextarea']" "css_element"
+    And I click on "Apply" "button"
+    And I click on "Save changes" "button"
+
+    When I follow "Profile" in the user menu
+    And I click on "Edit profile" "link" in the "region-main" "region"
+    And I expand all fieldsets
+    And I set the field "profile_field_superfield" to "The big guy"
+    And I click on "Update profile" "button"
+
+    Then I should see "This field cannot be left empty when Super field is The big guy"
