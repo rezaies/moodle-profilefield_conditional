@@ -85,7 +85,7 @@ class profile_field_conditional extends profile_field_menu {
 
         // MDL-57085: The following chunk would be moved into edit_after_data if edit_after_data were being called for signup form.
         if ($this->field->param4) { // The 'hide all' option is selected.
-            foreach (call_user_func_array('array_merge', $this->disabledset) as $element) {
+            foreach (call_user_func_array('array_merge', array_values($this->disabledset)) as $element) {
                 $mform->hideIf("profile_field_{$element}", $this->inputname, 'eq', '');
             }
         }
