@@ -23,6 +23,7 @@ defaults:
 
 jobs:
   release-at-moodle-org:
+    if: github.repository_owner == 'rezaies'
     runs-on: ubuntu-latest
     env:
       PLUGIN: profilefield_conditional
