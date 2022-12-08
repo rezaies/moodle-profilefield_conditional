@@ -1,0 +1,37 @@
+name: Release to GitHub
+
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch: {}
+
+jobs:
+  release:
+    # Avoid forks to perform this job.
+    if: github.repository_owner == 'the-training-room-online'
+    name: Create Release
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+
+      - name: Build Zip archive
+        run: |
+          export PLUGINTYPE=profilefield
+          export PLUGINNAME=conditional
+          export MOODLEVERSION=400
+          export ARCHIVENAME=${PLUGINTYPE}_${PLUGINNAME}_moodle${MOODLEVERSION}_${GITHUB_REF_NAME:1}.zip
+          cd ..
+          zip -r $ARCHIVENAME moodle-${PLUGINTYPE}_${PLUGINNAME} --exclude="*.git/*" --exclude="*.github/*"
+          mkdir moodle-${PLUGINTYPE}_${PLUGINNAME}/build/
+          mv $ARCHIVENAME moodle-${PLUGINTYPE}_${PLUGINNAME}/build/
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: build/*
+          artifactContentType: application/zip
+          artifactErrorsFailBuild: true
+          body: Release to GitHub for Moodle 4.0
