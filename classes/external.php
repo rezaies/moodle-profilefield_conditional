@@ -62,7 +62,7 @@ class external extends \external_api {
         $context = \context_system::instance();
         self::validate_context($context);
 
-        $fields = $DB->get_records_select('user_info_field', 'id NOT IN (?)', array($fieldid), '', 'id, shortname, name');
+        $fields = $DB->get_records_select('user_info_field', 'id NOT IN (?)', [$fieldid], 'sortorder', 'id, shortname, name');
 
         return $fields;
     }

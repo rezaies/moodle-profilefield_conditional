@@ -50,23 +50,25 @@ class profile_define_conditional extends profile_define_menu {
         $form->addRule('param1', get_string('profilemenunooptions', 'admin'), 'required', null, 'client');
 
         $form->addElement('button', 'conditionconfigbutton', get_string('configurecondition', 'profilefield_conditional'));
-        $fieldid = optional_param('id', 0, PARAM_INT);
 
         // Param 5 for conditional type contains all the conditions in JSON format.
         $form->addElement('hidden', 'param5', '', array('id' => 'profilefield_conditional_conditionconfiguration'));
         $form->setType('param5', PARAM_RAW);
-
-        $script = html_writer::script("require(['profilefield_conditional/conditionconfig'], function(conditionConfig) {
-            conditionConfig.init('[name=\"param1\"]', '#profilefield_conditional_conditionconfiguration',
-                '[name=\"conditionconfigbutton\"]', $fieldid);
-        });");
-        $form->addElement('html', $script);
 
         // Param 4 for conditional type determines if all hidden fields are going to be initially hidden or not.
         $form->addElement('selectyesno', 'param4', get_string('hiddeninitially', 'profilefield_conditional'));
         $form->addHelpButton('param4', 'hiddeninitially', 'profilefield_conditional');
         $form->setDefault('param4', 1); // Defaults to 'yes'.
         $form->setType('param4', PARAM_INT);
+    }
+
+    public function define_after_data(&$mform) {
+        $fieldid = (int) $mform->getElementValue('id');
+        $script = html_writer::script("require(['profilefield_conditional/conditionconfig'], function(conditionConfig) {
+            conditionConfig.init('[name=\"param1\"]', '#profilefield_conditional_conditionconfiguration',
+                '[name=\"conditionconfigbutton\"]', $fieldid);
+        });");
+        $mform->addElement('html', $script);
     }
 
     /**
