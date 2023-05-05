@@ -42,44 +42,55 @@
         ]
     }
 }}
-<div class="alert alert-info alert-block fade in profilefield_conditional_notice">
+<div class="alert alert-info alert-dismissible fade show profilefield_conditional_notice">
     <button type="button" class="close" data-dismiss="alert">&times;</button>
     {{#str}}notice, profilefield_conditional{{/str}}
 </div>
 <div class="no-overflow" style="max-height: 300px">
-<table class="table table-condensed">
-    <thead>
-    <tr>
-        <th scope="col" class="header">{{#str}}menuoption, profilefield_conditional{{/str}}</th>
-        {{#fields}}
-        <th scope="col" class="header">{{name}} ({{shortname}})</th>
-        {{/fields}}
-    </tr>
-    </thead>
-    <tbody>
-        {{#options}}
-        <tr class="profilefield_conditional_config">
-            <td class="profilefield_conditional_optionlabel">{{option}}</td>
+    <table class="table table-sm">
+        <tr>
+            <th scope="col" class="header">{{#str}}menuoption, profilefield_conditional{{/str}}</th>
             {{#fields}}
-            <td>
-                <span style="white-space: nowrap;">
-                    <input type="checkbox" name="required_{{option}}[{{id}}]" id="required_{{index}}_{{id}}" data-field="profilefield_conditional_field_required_{{option}}_{{shortname}}" class="profilefield_conditional_field_required"/>
-                    <label for="required_{{index}}_{{id}}">{{#str}}required, profilefield_conditional{{/str}}</label>
-                </span>
-                <br />
-                <span style="white-space: nowrap;">
-                    <input type="checkbox" name="hidden{{option}}[{{id}}]" id="hidden_{{index}}_{{id}}" data-field="profilefield_conditional_field_hidden_{{option}}_{{shortname}}" class="profilefield_conditional_field_hidden"/>
-                    <label for="hidden_{{index}}_{{id}}">{{#str}}hidden, profilefield_conditional{{/str}}</label>
-                </span>
-            </td>
+            <th scope="col" class="header">{{name}} ({{shortname}})</th>
             {{/fields}}
         </tr>
-        {{/options}}
-    </tbody>
-</table>
+            {{#options}}
+            <tr class="profilefield_conditional_config">
+                <td class="profilefield_conditional_optionlabel">{{option}}</td>
+                {{#fields}}
+                <td>
+                    <div class="form-check">
+                        <input
+                            type="checkbox"
+                            name="required_{{option}}[{{id}}]"
+                            id="required_{{uniqid}}_{{index}}_{{id}}"
+                            data-field="profilefield_conditional_field_required_{{option}}_{{shortname}}"
+                            class="form-check-input profilefield_conditional_field_required"
+                        />
+                        <label class="form-check-label" for="required_{{uniqid}}_{{index}}_{{id}}">
+                            {{#str}}required, profilefield_conditional{{/str}}
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input
+                            type="checkbox"
+                            name="hidden{{option}}[{{id}}]"
+                            id="hidden_{{uniqid}}_{{index}}_{{id}}"
+                            data-field="profilefield_conditional_field_hidden_{{option}}_{{shortname}}"
+                            class="form-check-input profilefield_conditional_field_hidden"
+                        />
+                        <label class="form-check-label" for="hidden_{{uniqid}}_{{index}}_{{id}}">
+                            {{#str}}hidden, profilefield_conditional{{/str}}
+                        </label>
+                    </div>
+                </td>
+                {{/fields}}
+            </tr>
+            {{/options}}
+    </table>
 </div>
 
-<div data-region="scale-buttons">
-    <input type="button" data-action="cancel" value="{{#str}}cancel{{/str}}"/>
-    <input type="button" data-action="close" value="{{#str}}apply, profilefield_conditional{{/str}}"/>
+<div class="mt-2">
+    <input type="button" class="btn btn-secondary" data-action="cancel" value="{{#str}}cancel{{/str}}"/>
+    <input type="button" class="btn btn-primary" data-action="close" value="{{#str}}apply, profilefield_conditional{{/str}}"/>
 </div>
