@@ -81,7 +81,16 @@ class profile_field_conditional extends profile_field_menu {
     public function edit_field_add($mform) {
         global $PAGE;
 
-        $mform->addElement('select', $this->inputname, format_string($this->field->name), $this->options);
+        $mform->addElement(
+            'select',
+            $this->inputname,
+            format_string($this->field->name),
+            $this->options,
+            [
+                'data-conditions' => $this->field->param5,
+                'data-req-html' => $mform->getReqHTML(),
+            ]
+        );
 
         // MDL-57085: The following chunk would be moved into edit_after_data if edit_after_data were being called for signup form.
         if ($this->field->param4) { // The 'hide all' option is selected.
@@ -111,8 +120,11 @@ class profile_field_conditional extends profile_field_menu {
         }
 
         // MDL-57085: The following line would be moved into edit_after_data if edit_after_data were being called for signup form.
-        $PAGE->requires->js_call_amd('profilefield_conditional/conditions', 'apply',
-                array($this->field->shortname, $this->field->param5, $mform->getReqHTML()));
+        $PAGE->requires->js_call_amd(
+            'profilefield_conditional/conditions',
+            'apply',
+            [$this->field->shortname]
+        );
 
         // MDL-57085: The following lines were not required if edit_after_data were being called for signup form.
         // This is for the future fields that are defined as required in their settings.

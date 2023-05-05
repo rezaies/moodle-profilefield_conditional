@@ -44,5 +44,5 @@ $string['privacy:metadata:profilefield_conditional:data'] = 'Conditional user pr
 $string['privacy:metadata:profilefield_conditional:dataformat'] = 'The format of the conditional user profile field user data';
 $string['privacy:metadata:profilefield_conditional:tableexplanation'] = 'Additional profile data';
 $string['required'] = 'Required';
-$string['requiredbycondition1'] = 'This field cannot be left empty when {$a->field1} is {$a->value1}';
+$string['requiredbycondition1'] = 'This field cannot be left empty when the "{$a->field1}" field is set to "{$a->value1}".';
 $string['requiredbycondition2'] = 'Please fill the {$a->field2} field. It cannot be left empty based on the value you selected here.';

@@ -151,4 +151,3 @@ class profile_define_conditional extends profile_define_menu {
         return $err;
     }
 }
-

@@ -41,13 +41,12 @@ define(['jquery'], function($) {
      * Condition object.
      *
      * @param {String} fieldName The conditional field name.
-     * @param {String} conditions Set of conditions as a json string.
-     * @param {String} reqHTML The html string for specifying required fields.
      * @constructor
      */
-    var Conditions = function(fieldName, conditions, reqHTML) {
+    var Conditions = function(fieldName) {
         this.fieldName = fieldName;
-        this.conditions = $.parseJSON(conditions);
+        var conditionalField = $('#id_profile_field_' + fieldName);
+        this.conditions = conditionalField.data('conditions');
         var allElements = [];
         this.conditions.forEach(function(option) {
             option.hiddenfields.forEach(function(field) {
@@ -63,11 +62,11 @@ define(['jquery'], function($) {
         });
 
         this.allElements = allElements;
-        this.reqHTML = reqHTML;
+        this.reqHTML = conditionalField.data('reqHtml');
 
         this.initReqStars();
         this.toggleReqStars();
-        $('#id_profile_field_' + fieldName).change(this.toggleReqStars.bind(this));
+        conditionalField.change(this.toggleReqStars.bind(this));
     };
 
     Conditions.prototype.fieldName = null;
@@ -148,13 +147,11 @@ define(['jquery'], function($) {
          * Main initialisation.
          *
          * @param {String} fieldName The conditional field name.
-         * @param {String} conditions Set of conditions as a json string.
-         * @param {String} reqHTML The html string for specifying required fields.
          * @return {Conditions} A new instance of Conditions.
          * @method init
          */
-        apply: function(fieldName, conditions, reqHTML) {
-            return new Conditions(fieldName, conditions, reqHTML);
+        apply: function(fieldName) {
+            return new Conditions(fieldName);
         }
     };
 });
