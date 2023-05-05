@@ -45,4 +45,4 @@ $string['privacy:metadata:profilefield_conditional:dataformat'] = 'The format of
 $string['privacy:metadata:profilefield_conditional:tableexplanation'] = 'Additional profile data';
 $string['required'] = 'Required';
 $string['requiredbycondition1'] = 'This field cannot be left empty when the "{$a->field1}" field is set to "{$a->value1}".';
-$string['requiredbycondition2'] = 'Please fill the {$a->field2} field. It cannot be left empty based on the value you selected here.';
+$string['requiredbycondition2'] = 'Please fill the "{$a->field2}" field. It cannot be left empty based on the value you selected here.';
