@@ -41,7 +41,7 @@ class external extends \external_api {
      * @return \external_function_parameters
      */
     public static function get_other_fields_parameters() {
-        $fieldid = new \external_value(PARAM_INT, 'Current field id', VALUE_OPTIONAL);
+        $fieldid = new \external_value(PARAM_INT, 'Current field id', VALUE_DEFAULT);
         $params = array('fieldid' => $fieldid);
         return new \external_function_parameters($params);
     }
