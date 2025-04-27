@@ -46,9 +46,9 @@ class profile_field_conditional extends profile_field_menu {
     public array $requiredset = [];
 
     #[\Override]
-    public function __construct($fieldid = 0, $userid = 0) {
+    public function __construct($fieldid = 0, $userid = 0, $fielddata = null) {
         // First, call parent constructor.
-        parent::__construct($fieldid, $userid);
+        parent::__construct($fieldid, $userid, $fielddata);
 
         // Param 5 for the conditional type is the conditions.
         if (isset($this->field->param5)) {
