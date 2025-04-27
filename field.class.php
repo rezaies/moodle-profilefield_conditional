@@ -36,39 +36,28 @@ require_once(__DIR__ . '/../menu/field.class.php');
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class profile_field_conditional extends profile_field_menu {
-
-    /** @var array */
+    /** @var array Array of fields that should be cleared for each option */
     protected array $clearedset = [];
 
-    /** @var array $disabledset */
-    public $disabledset;
+    /** @var array Array of fields that should be hidden for each option */
+    public array $disabledset = [];
 
-    /** @var array $requiredset */
-    public $requiredset;
+    /** @var array Array of fields that should be required for each option */
+    public array $requiredset = [];
 
-    /**
-     * Constructor method.
-     *
-     * Pulls out the options for the conditional from the database and sets the the corresponding key for the data if it exists.
-     *
-     * @param int $fieldid
-     * @param int $userid
-     */
+    #[\Override]
     public function __construct($fieldid = 0, $userid = 0) {
-        // First call parent constructor.
+        // First, call parent constructor.
         parent::__construct($fieldid, $userid);
 
-        $this->disabledset = array();
-        $this->requiredset = array();
-
-        // Param 5 for conditional type is the conditions.
+        // Param 5 for the conditional type is the conditions.
         if (isset($this->field->param5)) {
             $conditions = json_decode($this->field->param5);
         } else {
-            $conditions = array();
+            $conditions = [];
         }
 
-        foreach ($conditions as $key => $condition) {
+        foreach ($conditions as $condition) {
             $this->disabledset[$condition->option] = array_unique(array_merge(
                 $condition->hiddenfields ?? [],
                 $condition->hiddenclearedfields ?? [],
@@ -83,6 +72,7 @@ class profile_field_conditional extends profile_field_menu {
      * Overwrites the base class method
      * @param MoodleQuickForm $mform Moodle form instance
      */
+    #[\Override]
     public function edit_field_add($mform) {
         global $PAGE;
 
@@ -97,7 +87,7 @@ class profile_field_conditional extends profile_field_menu {
             ]
         );
 
-        // MDL-57085: The following chunk would be moved into edit_after_data if edit_after_data were being called for signup form.
+        // MDL-57085: The following chunk would be moved into edit_after_data if edit_after_data were being called during signup.
         if ($this->field->param4) { // The 'hide all' option is selected.
             $flatelements = array_unique(array_merge(...(array_values($this->disabledset))));
             foreach ($flatelements as $element) {
@@ -125,19 +115,23 @@ class profile_field_conditional extends profile_field_menu {
             }
         }
 
-        // MDL-57085: The following line would be moved into edit_after_data if edit_after_data were being called for signup form.
+        // MDL-57085: The following line would be moved into edit_after_data if edit_after_data were being called during signup.
         $PAGE->requires->js_call_amd(
             'profilefield_conditional/conditions',
             'apply',
             [$this->field->shortname]
         );
 
-        // MDL-57085: The following lines were not required if edit_after_data were being called for signup form.
+        // MDL-57085: The following lines were not required if edit_after_data were being called during signup.
         // This is for the future fields that are defined as required in their settings.
         MoodleQuickForm::registerRule('required', null, 'profilefield_conditional\rule_required');
         MoodleQuickForm::registerRule('profilefield_conditional_rule', null, 'profilefield_conditional\rule_required_remove');
-        $mform->addRule($this->inputname, get_string('extradata', 'profilefield_conditional'), 'profilefield_conditional_rule',
-                array(&$mform, $this));
+        $mform->addRule(
+            $this->inputname,
+            get_string('extradata', 'profilefield_conditional'),
+            'profilefield_conditional_rule',
+            [&$mform, $this]
+        );
     }
 
     #[\Override]
@@ -163,16 +157,11 @@ class profile_field_conditional extends profile_field_menu {
         parent::edit_after_data($mform);
     }
 
-    /**
-     * Validate the form field from profile page
-     *
-     * @param stdClass $usernew
-     * @return  string  contains error message otherwise null
-     **/
+    #[\Override]
     public function edit_validate_field($usernew) {
         global $DB;
 
-        $errors = array();
+        $errors = [];
 
         if (
             !empty($usernew->{$this->inputname})
@@ -180,15 +169,16 @@ class profile_field_conditional extends profile_field_menu {
             && count((array) $usernew) > 2  // If not, we have an incomplete user object, and a validation check is not possible.
         ) {
             foreach ($this->requiredset[$usernew->{$this->inputname}] as $requiredfield) {
-
                 $data = new stdClass();
                 $data->field1 = format_string($this->field->name);
                 $data->value1 = $this->options[$usernew->{$this->inputname}];
                 $data->field2 = $requiredfield;
 
                 if (isset($usernew->{'profile_field_' . $requiredfield})) {
-                    if (is_array($usernew->{'profile_field_' . $requiredfield}) &&
-                            isset($usernew->{'profile_field_' . $requiredfield}['text'])) {
+                    if (
+                        is_array($usernew->{'profile_field_' . $requiredfield}) &&
+                        isset($usernew->{'profile_field_' . $requiredfield}['text'])
+                    ) {
                         $value = $usernew->{'profile_field_' . $requiredfield}['text'];
                     } else {
                         $value = $usernew->{'profile_field_' . $requiredfield};
@@ -199,10 +189,13 @@ class profile_field_conditional extends profile_field_menu {
 
                 if (($value !== '0') && empty($value)) {
                     if (isset($usernew->{'profile_field_' . $requiredfield})) {
-                        $errors['profile_field_' . $requiredfield] = get_string('requiredbycondition1', 'profilefield_conditional',
-                                $data);
+                        $errors['profile_field_' . $requiredfield] = get_string(
+                            'requiredbycondition1',
+                            'profilefield_conditional',
+                            $data
+                        );
                     } else {
-                        $data->field2 = $DB->get_field('user_info_field', 'name', array('shortname' => $requiredfield));
+                        $data->field2 = $DB->get_field('user_info_field', 'name', ['shortname' => $requiredfield]);
                         $errors[$this->inputname] = get_string('requiredbycondition2', 'profilefield_conditional', $data);
                     }
                 }

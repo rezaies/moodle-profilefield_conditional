@@ -43,7 +43,7 @@
     }
 }}
 <div class="alert alert-info alert-dismissible fade show profilefield_conditional_notice">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <button type="button" class="close" data-dismiss="alert" data-bs-dismiss="alert">&times;</button>
     {{#str}}notice, profilefield_conditional{{/str}}
 </div>
 <div class="no-overflow" style="max-height: 300px">
@@ -62,7 +62,6 @@
                     <div class="form-check">
                         <input
                             type="checkbox"
-                            name="required_{{option}}[{{id}}]"
                             id="required_{{uniqid}}_{{index}}_{{id}}"
                             data-field="profilefield_conditional_field_required_{{option}}_{{shortname}}"
                             class="form-check-input profilefield_conditional_field_required"
@@ -74,7 +73,6 @@
                     <div class="form-check">
                         <input
                             type="checkbox"
-                            name="hidden{{option}}[{{id}}]"
                             id="hidden_{{uniqid}}_{{index}}_{{id}}"
                             data-field="profilefield_conditional_field_hidden_{{option}}_{{shortname}}"
                             class="form-check-input profilefield_conditional_field_hidden"
