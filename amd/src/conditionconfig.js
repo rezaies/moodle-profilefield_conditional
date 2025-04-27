@@ -110,34 +110,17 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
         };
 
         ConditionConfig.prototype.applyRestriction = function(source) {
-            var sourceid = source.id;
-            var sourceatt = $(source).attr('data-field');
-            var targetatt = '';
-            var targetid = '';
-
-            if ($(source).hasClass('profilefield_conditional_field_required')) {
-                targetatt = sourceatt.replace('profilefield_conditional_field_required_', 'profilefield_conditional_field_hidden_');
-                targetid = sourceid.replace('required_', 'hidden_');
-            } else if ($(source).hasClass('profilefield_conditional_field_hidden')) {
-                targetatt = sourceatt.replace('profilefield_conditional_field_hidden_', 'profilefield_conditional_field_required_');
-                targetid = sourceid.replace('hidden_', 'required_');
-            }
-
-            if (targetid === '' || targetid == sourceid) {
-                return;
-            }
-
-            var slashedtargetatt = targetatt
-                    .replace(/\\/g, '\\\\')
-                    .replace(/'/g, '\\\'')
-                    .replace(/"/g, '\\"')
-                    .replace(/\0/g, '\\0');
-
-            if ($(source).is(':checked')) {
-                $(source).parent().parent().find('[data-field="' + slashedtargetatt + '"]').attr('checked', false);
-                $(source).parent().parent().find('[data-field="' + slashedtargetatt + '"]').prop('disabled', true);
-            } else {
-                $(source).parent().parent().find('[data-field="' + slashedtargetatt + '"]').prop('disabled', false);
+            if (source.closest('.profilefield_conditional_config')) {
+                source.parentElement.parentElement.querySelectorAll('[type="checkbox"]').forEach(checkbox => {
+                    if (checkbox !== source) {
+                        if (source.checked) {
+                            checkbox.checked = false;
+                            checkbox.disabled = true;
+                        } else {
+                            checkbox.disabled = false;
+                        }
+                    }
+                });
             }
         };
 
@@ -180,6 +163,18 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                             }
                         );
                     });
+                    if (option.hiddenclearedfields) {
+                        option.hiddenclearedfields.forEach(function (field) {
+                            body.find(`[data-field="profilefield_conditional_field_hiddencleared_${slashedoption}_${field}"]`)
+                                .attr('checked', true);
+                            body.find(`[data-field="profilefield_conditional_field_hiddencleared_${slashedoption}_${field}"]`)
+                                .each(
+                                    function () {
+                                        self.applyRestriction(this);
+                                    }
+                                );
+                        });
+                    }
                 });
             }
             body.on('click', '[data-action="close"]', function() {
@@ -207,6 +202,7 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
             this.options.forEach(function(option) {
                 var requiredfields = [];
                 var hiddenfields = [];
+                var hiddenclearedfields = [];
                 var slashedoption = option.option
                         .replace(/\\/g, '\\\\')
                         .replace(/'/g, '\\\'')
@@ -223,11 +219,17 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                             ).is(':checked')) {
                         hiddenfields.push(field.shortname);
                     }
+                    if (body.find(
+                        '[data-field="profilefield_conditional_field_hiddencleared_' + slashedoption + '_' + field.shortname + '"]'
+                    ).is(':checked')) {
+                        hiddenclearedfields.push(field.shortname);
+                    }
                 });
                 data.push({
                     option: option.option,
                     requiredfields: requiredfields,
-                    hiddenfields: hiddenfields
+                    hiddenfields: hiddenfields,
+                    hiddenclearedfields: hiddenclearedfields,
                 });
             });
             var datastring = JSON.stringify(data);

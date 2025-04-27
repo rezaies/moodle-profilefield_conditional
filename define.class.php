@@ -134,17 +134,18 @@ class profile_define_conditional extends profile_define_menu {
                 }
 
                 foreach ($conditions as $condition) {
-                    foreach ($condition->requiredfields as $field) {
-                        if (!$this->is_profilefield($field)) {
-                            $err['conditionconfigbutton'] = get_string('notaprofilefield', 'profilefield_conditional');
+                    foreach (['requiredfields', 'hiddenfields', 'hiddenclearedfields'] as $property) {
+                        foreach ($condition->$property as $field) {
+                            if (!$this->is_profilefield($field)) {
+                                $err['conditionconfigbutton'] = get_string('notaprofilefield', 'profilefield_conditional');
+                                break 2;
+                            }
                         }
                     }
-                    foreach ($condition->hiddenfields as $field) {
-                        if (!$this->is_profilefield($field)) {
-                            $err['conditionconfigbutton'] = get_string('notaprofilefield', 'profilefield_conditional');
-                        }
-                    }
-                    if (array_intersect($condition->requiredfields, $condition->hiddenfields)) {
+                    if (
+                        array_intersect($condition->requiredfields, $condition->hiddenfields) ||
+                        array_intersect($condition->requiredfields, $condition->hiddenclearedfields)
+                    ) {
                         $err['conditionconfigbutton'] = get_string('hiddenrequired', 'profilefield_conditional');
                     }
                 }

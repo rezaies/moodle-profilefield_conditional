@@ -37,6 +37,9 @@ require_once(__DIR__ . '/../menu/field.class.php');
  */
 class profile_field_conditional extends profile_field_menu {
 
+    /** @var array */
+    protected array $clearedset = [];
+
     /** @var array $disabledset */
     public $disabledset;
 
@@ -66,10 +69,12 @@ class profile_field_conditional extends profile_field_menu {
         }
 
         foreach ($conditions as $key => $condition) {
-            foreach ($condition->hiddenfields as $hiddenfield) {
-                $this->disabledset[$condition->option][] = $hiddenfield;
-            }
-            $this->requiredset[$condition->option] = !empty($condition->requiredfields) ? $condition->requiredfields : array();
+            $this->disabledset[$condition->option] = array_unique(array_merge(
+                $condition->hiddenfields ?? [],
+                $condition->hiddenclearedfields ?? [],
+            ));
+            $this->clearedset[$condition->option] = $condition->hiddenclearedfields ?? [];
+            $this->requiredset[$condition->option] = $condition->requiredfields ?? [];
         }
     }
 
@@ -133,6 +138,29 @@ class profile_field_conditional extends profile_field_menu {
         MoodleQuickForm::registerRule('profilefield_conditional_rule', null, 'profilefield_conditional\rule_required_remove');
         $mform->addRule($this->inputname, get_string('extradata', 'profilefield_conditional'), 'profilefield_conditional_rule',
                 array(&$mform, $this));
+    }
+
+    #[\Override]
+    public function edit_after_data($mform) {
+        // It's ok that edit_after_data is not called during signup.
+        // Clearing fields is only needed when fields already have values, and this is not the case for signup form.
+        $value = $mform->getElementValue($this->inputname)[0] ?? null;
+        if (!empty($this->clearedset[$value])) {
+            $fields = profile_get_user_fields_with_data(0);
+            foreach ($this->clearedset[$value] as $element) {
+                foreach ($fields as $formfield) {
+                    if ($formfield->inputname == "profile_field_{$element}") {
+                        // The $formfield->edit_field_set_default($mform) statement does not work as expected.
+                        $dummyuser = new stdClass();
+                        $formfield->edit_load_user_data($dummyuser);
+                        $mform->setDefault("profile_field_{$element}", $dummyuser->{"profile_field_{$element}"});
+                        break;
+                    }
+                }
+            }
+        }
+
+        parent::edit_after_data($mform);
     }
 
     /**

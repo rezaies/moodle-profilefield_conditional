@@ -83,6 +83,17 @@
                             {{#str}}hidden, profilefield_conditional{{/str}}
                         </label>
                     </div>
+                    <div class="form-check">
+                        <input
+                            type="checkbox"
+                            id="hiddencleared_{{uniqid}}_{{index}}_{{id}}"
+                            data-field="profilefield_conditional_field_hiddencleared_{{option}}_{{shortname}}"
+                            class="form-check-input profilefield_conditional_field_hiddencleared"
+                        />
+                        <label class="form-check-label" for="hiddencleared_{{uniqid}}_{{index}}_{{id}}">
+                            {{#str}}hiddenandcleared, profilefield_conditional{{/str}}
+                        </label>
+                    </div>
                 </td>
                 {{/fields}}
             </tr>

@@ -29,13 +29,14 @@ $string['configurecondition'] = 'Configure conditions';
 $string['emptycondition'] = 'You need to configure option conditions.';
 $string['extradata'] = 'The submitted data contains values for fields that should be left blank based on the selected option here.';
 $string['hidden'] = 'Hidden';
+$string['hiddenandcleared'] = 'Hidden and cleared';
 $string['hiddeninitially'] = 'Hide initially';
 $string['hiddeninitially_help'] = '* Yes - None of the fields that may hide in some conditions is displayed initially. Some new fields may appear after users make a choice.
 * No - All fields will be displayed to users initially. When they select a value for the conditional field, some of the existing fields hide';
 $string['hiddenrequired'] = 'There is at least one field that has been set to hidden whilst also being required!';
 $string['menuoption'] = 'Menu option';
 $string['notaprofilefield'] = 'Some fields that are referred to in condition configuration do not exist. Please verify conditions. Remember to press "OK" if the configuration looks fine to you.';
-$string['notice'] = 'Warning, multiple conditional fields may cause conflicts. Hidden required fields may prevent the form from submission. To prevent this please check that users don\'t fall into a situation where a field is required by a conditional field and hidden by another conditional field at the same time.';
+$string['notice'] = '<p><strong>Warning:</strong> Multiple conditional fields may cause conflicts. Hidden required fields may prevent the form from being submitted. To avoid this, please ensure that users do not encounter a situation where a field is required by one conditional field and hidden by another at the same time.</p><p><strong>Note:</strong> "Hidden and cleared" is an experimental feature. It has not been tested with all field types, so please check whether it works with the field type you intend to use.</p>';
 $string['optionconditionmismatch'] = 'You have made some modifications to the menu options after the last time you configured option conditions. Please verify that your conditions are up to date.';
 $string['pluginname'] = 'Conditional field';
 $string['privacy:metadata:profilefield_conditional:userid'] = 'The ID of the user whose data is stored by the conditional user profile field';
