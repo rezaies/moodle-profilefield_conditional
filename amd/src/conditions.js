@@ -46,7 +46,7 @@ define(['jquery'], function($) {
     var Conditions = function(fieldName) {
         this.fieldName = fieldName;
         var conditionalField = $('#id_profile_field_' + fieldName);
-        this.conditions = conditionalField.data('conditions');
+        this.conditions = conditionalField.data('conditions') || [];
         var allElements = [];
         this.conditions.forEach(function(option) {
             option.hiddenfields.forEach(function(field) {
