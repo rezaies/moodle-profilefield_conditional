@@ -41,6 +41,22 @@ class profile_define_conditional extends profile_define_menu {
      * @param MoodleQuickForm $form
      */
     public function define_form_specific($form) {
+        global $OUTPUT;
+
+        $a = new stdClass();
+        $a->donations = 4;
+        $a->years = 2025 - 2016;
+        $a->donationlink = 'https://ko-fi.com/A31043G';
+
+        $element = $form->createElement(
+            'html',
+            $OUTPUT->notification(
+                get_string('donationalert', 'profilefield_conditional', $a),
+                \core\output\notification::NOTIFY_INFO
+            )
+        );
+        $form->insertElementBefore($element, $form->_elements[0]->getName());
+
         parent::define_form_specific($form);
 
         $form->addHelpButton('param1', 'conditionalhelp', 'profilefield_conditional');

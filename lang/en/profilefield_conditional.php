@@ -26,6 +26,23 @@ $string['apply'] = 'OK';
 $string['conditionalhelp'] = 'How to enter the options?';
 $string['conditionalhelp_help'] = 'Please specify the menu options by entering one option per line. You can then specify which fields should be hidden or required when each option is selected.';
 $string['configurecondition'] = 'Configure conditions';
+$string['donationalert'] = '<p>Dear admin,</p>
+<p>I\'m truly happy to know that this plugin has been useful for you.
+ I\'ve kept it free so anyone can benefit from it. To sustain this, I\'ve always offered a voluntary donation option for those who find it valuable.
+ However, after {$a->years} years, the total support received has been minimal (just {$a->donations} donations as of the release of this version). While I\'m glad it\'s useful, this
+ makes it hard to justify prioritising updates without community backing.
+</p>
+<p>You can change that:
+<ul>
+    <li>A small donation helps me dedicate more time to this project.</li>
+    <li>Ensures faster updates and new features.</li>
+    <li>Keeps it free for everyone.</li>
+</ul>
+</p>
+<p><i>(This message is visible only to you—not end users.)</i></p>
+<p>If this plugin saves you time, consider supporting its future.</p>
+<p><a href="{$a->donationlink}" target="_blank">Click here to make a donation!</a></p>
+<p>Thank you for being part of this journey.</p>';
 $string['emptycondition'] = 'You need to configure option conditions.';
 $string['extradata'] = 'The submitted data contains values for fields that should be left blank based on the selected option here.';
 $string['hidden'] = 'Hidden';
