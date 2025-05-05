@@ -177,7 +177,7 @@ class profile_field_conditional extends profile_field_menu {
     }
     #[\Override]
     public function edit_validate_field($usernew) {
-        global $DB;
+        global $DB, $PAGE;
 
         $errors = [];
 
@@ -212,7 +212,15 @@ class profile_field_conditional extends profile_field_menu {
                             'profilefield_conditional',
                             $data
                         );
-                    } else {
+                    } else if (
+                        in_array(
+                            $PAGE->url->out_as_local_url(),
+                            [
+                                '/user/edit.php',
+                                '/user/editadvanced.php',
+                            ]
+                        )
+                    ) {
                         $data->field2 = $DB->get_field('user_info_field', 'name', ['shortname' => $requiredfield]);
                         $errors[$this->inputname] = get_string('requiredbycondition2', 'profilefield_conditional', $data);
                     }
