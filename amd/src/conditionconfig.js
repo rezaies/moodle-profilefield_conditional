@@ -69,12 +69,6 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                     self.options.push({index: index, option: value});
                 }
             });
-            /*
-            if (this.options.length == 0) {
-                // This should not happen.
-                return;
-            }
-            */
 
             this.getOtherFields(this.fieldId).done(function() {
 
@@ -148,11 +142,11 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                         body.find('[data-field="profilefield_conditional_field_required_' + slashedoption + '_' + field + '"]')
                                 .attr('checked', true);
                         body.find('[data-field="profilefield_conditional_field_required_' + slashedoption + '_' + field + '"]')
-                                .each(
-                            function() {
-                                self.applyRestriction(this);
-                            }
-                        );
+                            .each(
+                                function() {
+                                    self.applyRestriction(this);
+                                }
+                            );
                     });
                     option.hiddenfields.forEach(function(field) {
                         body.find('[data-field="profilefield_conditional_field_hidden_' + slashedoption + '_' + field + '"]')
@@ -164,12 +158,12 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                         );
                     });
                     if (option.hiddenclearedfields) {
-                        option.hiddenclearedfields.forEach(function (field) {
+                        option.hiddenclearedfields.forEach(function(field) {
                             body.find(`[data-field="profilefield_conditional_field_hiddencleared_${slashedoption}_${field}"]`)
                                 .attr('checked', true);
                             body.find(`[data-field="profilefield_conditional_field_hiddencleared_${slashedoption}_${field}"]`)
                                 .each(
-                                    function () {
+                                    function() {
                                         self.applyRestriction(this);
                                     }
                                 );
@@ -210,13 +204,13 @@ define(['jquery', 'core/notification', 'core/templates', 'core/ajax',
                         .replace(/\0/g, '\\0');
                 self.otherFields.forEach(function(field) {
                     if (body.find(
-                            '[data-field="profilefield_conditional_field_required_' + slashedoption + '_' + field.shortname + '"]'
-                            ).is(':checked')) {
+                        '[data-field="profilefield_conditional_field_required_' + slashedoption + '_' + field.shortname + '"]'
+                    ).is(':checked')) {
                         requiredfields.push(field.shortname);
                     }
                     if (body.find(
-                            '[data-field="profilefield_conditional_field_hidden_' + slashedoption + '_' + field.shortname + '"]'
-                            ).is(':checked')) {
+                        '[data-field="profilefield_conditional_field_hidden_' + slashedoption + '_' + field.shortname + '"]'
+                    ).is(':checked')) {
                         hiddenfields.push(field.shortname);
                     }
                     if (body.find(

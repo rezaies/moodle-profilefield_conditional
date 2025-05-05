@@ -163,7 +163,7 @@ class profile_field_conditional extends profile_field_menu {
      */
     #[\Override]
     public function edit_field_set_locked($mform) {
-        if ($this->is_locked() and !has_capability('moodle/user:update', context_system::instance())) {
+        if ($this->is_locked() && !has_capability('moodle/user:update', context_system::instance())) {
             if (!empty($this->disabledset[$this->data])) {
                 foreach ($this->disabledset[$this->data] as $element) {
                     if ($mform->elementExists("profile_field_{$element}")) {

@@ -24,11 +24,9 @@
 
 namespace profilefield_conditional\privacy;
 
-defined('MOODLE_INTERNAL') || die();
-
-use \core_privacy\local\metadata\collection;
-use \core_privacy\local\request\contextlist;
-use \core_privacy\local\request\approved_contextlist;
+use core_privacy\local\metadata\collection;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\approved_userlist;
 
@@ -39,32 +37,21 @@ use core_privacy\local\request\approved_userlist;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-        \core_privacy\local\metadata\provider,
-        \core_privacy\local\request\core_userlist_provider,
-        \core_privacy\local\request\plugin\provider {
-
-    /**
-     * Returns meta data about this system.
-     *
-     * @param   collection $collection The initialised collection to add items to.
-     * @return  collection A listing of user data stored through this system.
-     */
-    public static function get_metadata(collection $collection) : collection {
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
+    #[\Override]
+    public static function get_metadata(collection $collection): collection {
         return $collection->add_database_table('user_info_data', [
             'userid' => 'privacy:metadata:profilefield_conditional:userid',
             'fieldid' => 'privacy:metadata:profilefield_conditional:fieldid',
             'data' => 'privacy:metadata:profilefield_conditional:data',
-            'dataformat' => 'privacy:metadata:profilefield_conditional:dataformat'
+            'dataformat' => 'privacy:metadata:profilefield_conditional:dataformat',
         ], 'privacy:metadata:profilefield_conditional:tableexplanation');
     }
 
-    /**
-     * Get the list of contexts that contain user information for the specified user.
-     *
-     * @param   int         $userid     The user to search.
-     * @return  contextlist $contextlist  The contextlist containing the list of contexts used in this plugin.
-     */
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    #[\Override]
+    public static function get_contexts_for_userid(int $userid): contextlist {
         $sql = "SELECT ctx.id
                   FROM {user_info_data} uda
                   JOIN {user_info_field} uif ON uda.fieldid = uif.id
@@ -75,7 +62,7 @@ class provider implements
         $params = [
             'userid' => $userid,
             'contextlevel' => CONTEXT_USER,
-            'datatype' => 'conditional'
+            'datatype' => 'conditional',
         ];
         $contextlist = new contextlist();
         $contextlist->add_from_sql($sql, $params);
@@ -83,12 +70,8 @@ class provider implements
         return $contextlist;
     }
 
-    /**
-     * Get the list of users within a specific context.
-     *
-     * @param userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
-     */
-    public static function get_users_in_context(userlist $userlist) {
+    #[\Override]
+    public static function get_users_in_context(userlist $userlist): void {
         $context = $userlist->get_context();
 
         if (!$context instanceof \context_user) {
@@ -104,18 +87,14 @@ class provider implements
 
         $params = [
             'userid' => $context->instanceid,
-            'datatype' => 'conditional'
+            'datatype' => 'conditional',
         ];
 
         $userlist->add_from_sql('userid', $sql, $params);
     }
 
-    /**
-     * Export all user data for the specified user, in the specified contexts.
-     *
-     * @param approved_contextlist $contextlist The approved contexts to export information for.
-     */
-    public static function export_user_data(approved_contextlist $contextlist) {
+    #[\Override]
+    public static function export_user_data(approved_contextlist $contextlist): void {
         $user = $contextlist->get_user();
         foreach ($contextlist->get_contexts() as $context) {
             // Check if the context is a user context.
@@ -125,7 +104,7 @@ class provider implements
                     $data = (object) [
                         'name' => $result->name,
                         'description' => $result->description,
-                        'data' => $result->data
+                        'data' => $result->data,
                     ];
                     \core_privacy\local\request\writer::with_context($context)->export_data([
                         get_string('pluginname', 'profilefield_conditional')], $data);
@@ -134,24 +113,16 @@ class provider implements
         }
     }
 
-    /**
-     * Delete all user data which matches the specified context.
-     *
-     * @param   context $context A user context.
-     */
-    public static function delete_data_for_all_users_in_context(\context $context) {
+    #[\Override]
+    public static function delete_data_for_all_users_in_context(\context $context): void {
         // Delete data only for user context.
         if ($context->contextlevel == CONTEXT_USER) {
             static::delete_data($context->instanceid);
         }
     }
 
-    /**
-     * Delete multiple users within a single context.
-     *
-     * @param approved_userlist $userlist The approved context and user information to delete information for.
-     */
-    public static function delete_data_for_users(approved_userlist $userlist) {
+    #[\Override]
+    public static function delete_data_for_users(approved_userlist $userlist): void {
         $context = $userlist->get_context();
 
         if ($context instanceof \context_user) {
@@ -159,12 +130,8 @@ class provider implements
         }
     }
 
-    /**
-     * Delete all user data for the specified user, in the specified contexts.
-     *
-     * @param   approved_contextlist    $contextlist    The approved contexts and user information to delete information for.
-     */
-    public static function delete_data_for_user(approved_contextlist $contextlist) {
+    #[\Override]
+    public static function delete_data_for_user(approved_contextlist $contextlist): void {
         $user = $contextlist->get_user();
         foreach ($contextlist->get_contexts() as $context) {
             // Check if the context is a user context.
@@ -179,12 +146,12 @@ class provider implements
      *
      * @param  int $userid The user ID
      */
-    protected static function delete_data($userid) {
+    protected static function delete_data(int $userid): void {
         global $DB;
 
         $params = [
             'userid' => $userid,
-            'datatype' => 'conditional'
+            'datatype' => 'conditional',
         ];
 
         $DB->delete_records_select('user_info_data', "fieldid IN (
@@ -198,7 +165,7 @@ class provider implements
      * @param  int $userid The user ID
      * @return array An array of records.
      */
-    protected static function get_records($userid) {
+    protected static function get_records(int $userid): array {
         global $DB;
 
         $sql = "SELECT *
@@ -208,7 +175,7 @@ class provider implements
                        AND uif.datatype = :datatype";
         $params = [
             'userid' => $userid,
-            'datatype' => 'conditional'
+            'datatype' => 'conditional',
         ];
 
         return $DB->get_records_sql($sql, $params);

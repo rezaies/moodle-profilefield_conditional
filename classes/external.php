@@ -34,7 +34,6 @@ require_once("$CFG->libdir/externallib.php");
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class external extends \external_api {
-
     /**
      * Returns description of get_other_fields() parameters.
      *
@@ -42,7 +41,7 @@ class external extends \external_api {
      */
     public static function get_other_fields_parameters() {
         $fieldid = new \external_value(PARAM_INT, 'Current field id', VALUE_DEFAULT);
-        $params = array('fieldid' => $fieldid);
+        $params = ['fieldid' => $fieldid];
         return new \external_function_parameters($params);
     }
 
@@ -54,11 +53,9 @@ class external extends \external_api {
      */
     public static function get_other_fields($fieldid) {
         global $DB;
-        $params = self::validate_parameters(self::get_other_fields_parameters(),
-            array(
-                'fieldid' => $fieldid,
-            )
-        );
+        $params = self::validate_parameters(self::get_other_fields_parameters(), [
+            'fieldid' => $fieldid,
+        ]);
         $context = \context_system::instance();
         self::validate_context($context);
 
@@ -74,11 +71,11 @@ class external extends \external_api {
      */
     public static function get_other_fields_returns() {
         return new \external_multiple_structure(
-            new \external_single_structure(array(
+            new \external_single_structure([
                 'id' => new \external_value(PARAM_INT, 'Field ID'),
                 'shortname' => new \external_value(PARAM_RAW, 'Field short name'),
-                'name' => new \external_value(PARAM_RAW, 'Field name')
-            ))
+                'name' => new \external_value(PARAM_RAW, 'Field name'),
+            ])
         );
     }
 }

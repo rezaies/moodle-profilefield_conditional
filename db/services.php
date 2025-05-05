@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
  * Conditional profile field webservice functions.
  *
@@ -25,8 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$functions = array(
-    'profilefield_conditional_get_other_fields' => array(
+$functions = [
+    'profilefield_conditional_get_other_fields' => [
         'classname'    => 'profilefield_conditional\external',
         'methodname'   => 'get_other_fields',
         'classpath'    => '',
@@ -34,6 +33,5 @@ $functions = array(
         'type'         => 'read',
         'capabilities' => '',
         'ajax'         => true,
-    ),
-);
-
+    ],
+];

@@ -23,7 +23,6 @@
  */
 
 namespace profilefield_conditional;
-defined('MOODLE_INTERNAL') || die();
 
 /**
  * Required elements validation
@@ -35,21 +34,15 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class rule_required extends \MoodleQuickForm_Rule_Required {
-    /**
-     * This function returns Javascript code used to build client-side validation.
-     * It checks if an element is not empty.
-     *
-     * @param int $format format of data which needs to be validated.
-     * @return array
-     */
+    #[\Override]
     public function getValidationScript($format = null) {
         global $DB;
 
         static $js = '';
 
         if ($js == '') {
-            $conditionalfields = $DB->get_records('user_info_field', array('datatype' => 'conditional'));
-            $hiddensettings = array();
+            $conditionalfields = $DB->get_records('user_info_field', ['datatype' => 'conditional']);
+            $hiddensettings = [];
             foreach ($conditionalfields as $field) {
                 foreach (json_decode($field->param5) as $option) {
                     foreach ($option->hiddenfields as $hiddenfield) {
@@ -84,8 +77,8 @@ class rule_required extends \MoodleQuickForm_Rule_Required {
     }';
         }
 
-        list($prefix, $rule) = parent::getValidationScript($format);
+        [$prefix, $rule] = parent::getValidationScript($format);
 
-        return array($prefix . $js, "ruleenabled && $rule");
+        return [$prefix . $js, "ruleenabled && $rule"];
     }
 }
