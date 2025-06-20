@@ -45,7 +45,6 @@ class profile_field_conditional extends profile_field_menu {
     /** @var array Array of fields that should be required for each option */
     public array $requiredset = [];
 
-    #[\Override]
     public function __construct($fieldid = 0, $userid = 0, $fielddata = null) {
         // First, call parent constructor.
         parent::__construct($fieldid, $userid, $fielddata);
