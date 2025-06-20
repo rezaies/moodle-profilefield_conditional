@@ -134,6 +134,24 @@ class profile_field_conditional extends profile_field_menu {
     }
 
     #[\Override]
+    public function edit_after_data($mform) {
+        // It's OK that edit_after_data is not called during signup.
+        // Removing fields is only needed when the conditional field already has a value, and it's hidden or locked.
+        // This is not the case for the signup form.
+        if (!$this->is_editable() || ($this->is_locked() && !has_capability('moodle/user:update', context_system::instance()))) {
+            if (!empty($this->disabledset[$this->data])) {
+                foreach ($this->disabledset[$this->data] as $element) {
+                    if ($mform->elementExists("profile_field_{$element}")) {
+                        $mform->removeElement("profile_field_{$element}");
+                    }
+                }
+            }
+        }
+
+        return parent::edit_after_data($mform);
+    }
+
+    #[\Override]
     public function edit_save_data($usernew) {
         global $DB;
 
@@ -154,24 +172,6 @@ class profile_field_conditional extends profile_field_menu {
         }
     }
 
-    /**
-     * HardFreeze the field if locked.
-     * @param MoodleQuickForm $mform instance of the moodleform class
-     */
-    #[\Override]
-    public function edit_field_set_locked($mform) {
-        if ($this->is_locked() && !has_capability('moodle/user:update', context_system::instance())) {
-            if (!empty($this->disabledset[$this->data])) {
-                foreach ($this->disabledset[$this->data] as $element) {
-                    if ($mform->elementExists("profile_field_{$element}")) {
-                        $mform->removeElement("profile_field_{$element}");
-                    }
-                }
-            }
-        }
-
-        parent::edit_field_set_locked($mform);
-    }
     #[\Override]
     public function edit_validate_field($usernew) {
         global $DB, $PAGE;
