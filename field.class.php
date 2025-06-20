@@ -134,26 +134,24 @@ class profile_field_conditional extends profile_field_menu {
     }
 
     #[\Override]
-    public function edit_after_data($mform) {
-        // It's ok that edit_after_data is not called during signup.
-        // Clearing fields is only needed when fields already have values, and this is not the case for signup form.
-        $value = $mform->getElementValue($this->inputname)[0] ?? null;
-        if (!empty($this->clearedset[$value])) {
-            $fields = profile_get_user_fields_with_data(0);
-            foreach ($this->clearedset[$value] as $element) {
-                foreach ($fields as $formfield) {
-                    if ($formfield->inputname == "profile_field_{$element}") {
-                        // The $formfield->edit_field_set_default($mform) statement does not work as expected.
-                        $dummyuser = new stdClass();
-                        $formfield->edit_load_user_data($dummyuser);
-                        $mform->setDefault("profile_field_{$element}", $dummyuser->{"profile_field_{$element}"});
-                        break;
+    public function edit_save_data($usernew) {
+        global $DB;
+
+        parent::edit_save_data($usernew);
+
+        if (isset($usernew->{$this->inputname})) {
+            if (!empty($this->clearedset[$usernew->{$this->inputname}])) {
+                $clearedkeys = array_flip($this->clearedset[$usernew->{$this->inputname}]);
+                $profilefields = profile_get_user_fields_with_data(0);
+                foreach ($profilefields as $profilefield) {
+                    $shortname = str_replace('profile_field_', '', $profilefield->inputname);
+                    if (isset($clearedkeys[$shortname])) {
+                        $DB->delete_records('user_info_data', ['fieldid' => $profilefield->fieldid, 'userid' => $this->userid]);
+                        unset($usernew->{$profilefield->inputname});
                     }
                 }
             }
         }
-
-        parent::edit_after_data($mform);
     }
 
     /**
