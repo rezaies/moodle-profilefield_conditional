@@ -174,57 +174,136 @@ class profile_field_conditional extends profile_field_menu {
 
     #[\Override]
     public function edit_validate_field($usernew) {
-        global $DB, $PAGE;
-
         $errors = [];
 
+        $selected = $usernew->{$this->inputname} ?? null;
         if (
-            !empty($usernew->{$this->inputname})
-            && !empty($this->requiredset[$usernew->{$this->inputname}])
-            && count((array) $usernew) > 2  // If not, we have an incomplete user object, and a validation check is not possible.
+            !is_scalar($selected)
+            || empty($this->requiredset[$selected])
+            || count((array) $usernew) <= 2  // If not, we have an incomplete user object, and a validation check is not possible.
         ) {
-            foreach ($this->requiredset[$usernew->{$this->inputname}] as $requiredfield) {
-                $data = new stdClass();
-                $data->field1 = format_string($this->field->name);
-                $data->value1 = $this->options[$usernew->{$this->inputname}];
-                $data->field2 = $requiredfield;
+            return $errors;
+        }
 
-                if (isset($usernew->{'profile_field_' . $requiredfield})) {
-                    if (
-                        is_array($usernew->{'profile_field_' . $requiredfield}) &&
-                        isset($usernew->{'profile_field_' . $requiredfield}['text'])
-                    ) {
-                        $value = $usernew->{'profile_field_' . $requiredfield}['text'];
-                    } else {
-                        $value = $usernew->{'profile_field_' . $requiredfield};
-                    }
-                } else {
-                    $value = '';
-                }
+        $userid = (int) ($usernew->id ?? 0);
+        $dependentfields = null;
+        $unfillable = [];
+        foreach ($this->requiredset[$selected] as $requiredfield) {
+            // A field that is also hidden for the selected option is never required.
+            if (in_array($requiredfield, $this->disabledset[$selected] ?? [], true)) {
+                continue;
+            }
 
-                if (($value !== '0') && empty($value)) {
-                    if (isset($usernew->{'profile_field_' . $requiredfield})) {
-                        $errors['profile_field_' . $requiredfield] = get_string(
-                            'requiredbycondition1',
-                            'profilefield_conditional',
-                            $data
-                        );
-                    } else if (
-                        in_array(
-                            $PAGE->url->out_as_local_url(),
-                            [
-                                '/user/edit.php',
-                                '/user/editadvanced.php',
-                            ]
-                        )
-                    ) {
-                        $data->field2 = $DB->get_field('user_info_field', 'name', ['shortname' => $requiredfield]);
-                        $errors[$this->inputname] = get_string('requiredbycondition2', 'profilefield_conditional', $data);
-                    }
+            // The fields are looked up lazily, so that no queries are made when there is nothing to check.
+            $dependentfields ??= $this->get_dependent_fields($userid);
+            if (!isset($dependentfields[$requiredfield])) {
+                continue;
+            }
+            $dependent = $dependentfields[$requiredfield];
+            $inputname = 'profile_field_' . $requiredfield;
+
+            if ($this->is_fillable($dependent)) {
+                if (!$this->has_valid_value($dependent, $usernew->{$inputname} ?? null)) {
+                    $data = new stdClass();
+                    $data->field1 = format_string($this->field->name);
+                    $data->value1 = $this->options[$selected] ?? $selected;
+                    $data->field2 = $requiredfield;
+                    $errors[$inputname] = get_string('requiredbycondition1', 'profilefield_conditional', $data);
                 }
+            } else if (!$this->has_valid_value($dependent, $this->get_stored_value($dependent, $userid))) {
+                // Whatever was submitted for a field the user cannot fill in is not trusted. Only the stored value counts.
+                $unfillable[] = format_string($dependent->field->name);
             }
         }
 
+        if ($unfillable) {
+            // The inputs are not displayed, so the error can only be reported on the conditional field.
+            $data = new stdClass();
+            $data->field1 = format_string($this->field->name);
+            $data->value1 = $this->options[$selected] ?? $selected;
+            $data->field2 = implode('", "', $unfillable);
+            $errors[$this->inputname] = get_string('requiredbycondition2', 'profilefield_conditional', $data);
+        }
+
         return $errors;
+    }
+
+    /**
+     * Returns the profile fields of the given user (or of the signup form for 0), indexed by shortname.
+     *
+     * @param int $userid
+     * @return profile_field_base[]
+     */
+    protected function get_dependent_fields(int $userid): array {
+        $fields = [];
+        foreach (profile_get_user_fields_with_data($userid) as $field) {
+            $fields[$field->field->shortname] = $field;
+        }
+        return $fields;
+    }
+
+    /**
+     * Whether the current user is given an editable element for the field in the form being validated.
+     *
+     * Errors for fields that are not fillable cannot be attached to their (absent or frozen) elements.
+     *
+     * @param profile_field_base $field
+     * @return bool
+     */
+    protected function is_fillable(profile_field_base $field): bool {
+        if (empty($field->userid)) {
+            // Signup form: only the fields flagged for signup are displayed.
+            return $field->is_signup_field() && $field->is_editable();
+        }
+        // Profile edit forms: locked fields are frozen for users without the update capability.
+        return $field->is_editable()
+            && (!$field->is_locked() || has_capability('moodle/user:update', context_system::instance()));
+    }
+
+    /**
+     * Returns the value saved in the database for the user, ignoring the default value of the field.
+     *
+     * @param profile_field_base $field
+     * @param int $userid
+     * @return string|null Null when nothing is saved, or when there is no user yet.
+     */
+    protected function get_stored_value(profile_field_base $field, int $userid): ?string {
+        global $DB;
+
+        if ($userid <= 0) {
+            return null;
+        }
+        $value = $DB->get_field('user_info_data', 'data', ['userid' => $userid, 'fieldid' => $field->field->id]);
+        return $value === false ? null : $value;
+    }
+
+    /**
+     * Checks that a value, as submitted or saved, satisfies the requirement of a field.
+     *
+     * A missing, null, empty and whitespace-only value is not valid, but "0" is. The value of a menu must be the key of one of
+     * its options, submitted as a string or an integer. The editor of a textarea field submits an array holding the text and
+     * its format. Any other field type submits a scalar.
+     *
+     * @param profile_field_base $field
+     * @param mixed $value
+     * @return bool
+     */
+    protected function has_valid_value(profile_field_base $field, $value): bool {
+        if ($field instanceof profile_field_menu) {
+            return (is_string($value) || is_int($value))
+                && trim((string) $value) !== ''
+                && array_key_exists((string) $value, $field->options);
+        }
+        if (is_array($value)) {
+            if (!($field instanceof profile_field_textarea)) {
+                return false;
+            }
+            $formats = array_map('strval', [FORMAT_MOODLE, FORMAT_HTML, FORMAT_PLAIN, FORMAT_MARKDOWN]);
+            return is_string($value['text'] ?? null)
+                && trim($value['text']) !== ''
+                && is_scalar($value['format'] ?? null)
+                && in_array((string) $value['format'], $formats, true);
+        }
+        return is_scalar($value) && !is_bool($value) && trim((string) $value) !== '';
     }
 }
